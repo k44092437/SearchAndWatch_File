@@ -1,0 +1,9 @@
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.Form1.resources
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.Properties.Resources.resources
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.csproj.GenerateResource.cache
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\SearchAndWatch\bin\Debug\SearchAndWatch.exe
+C:\Users\Administrator\source\repos\SearchAndWatch\bin\Debug\SearchAndWatch.pdb
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.exe
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.pdb
+C:\Users\Administrator\source\repos\SearchAndWatch\obj\Debug\SearchAndWatch.csprojAssemblyReference.cache
