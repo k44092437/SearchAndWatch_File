@@ -51,7 +51,7 @@ namespace SearchAndWatch
 
             try
             {
-                for (int i = 1; i <= iRowCount;)
+                for (int i = 1; i <= iRowStartNums;)
                 {
                     int result = streamInput.ReadByte();
                     if (result == 13)
