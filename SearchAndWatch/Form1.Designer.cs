@@ -29,6 +29,10 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.SearchEndNumTxtBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.SearchStartNumTxtBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ChangeFileTxtbox = new System.Windows.Forms.TextBox();
@@ -36,11 +40,7 @@
             this.UpBtn = new System.Windows.Forms.Button();
             this.SearchTxtbox = new System.Windows.Forms.TextBox();
             this.AllSearchBtn = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.SearchStartNumTxtBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.SearchEndNumTxtBox = new System.Windows.Forms.TextBox();
+            this.ShowTxt = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,6 +63,40 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "操作栏";
+            // 
+            // SearchEndNumTxtBox
+            // 
+            this.SearchEndNumTxtBox.Location = new System.Drawing.Point(137, 170);
+            this.SearchEndNumTxtBox.Name = "SearchEndNumTxtBox";
+            this.SearchEndNumTxtBox.Size = new System.Drawing.Size(100, 21);
+            this.SearchEndNumTxtBox.TabIndex = 10;
+            this.SearchEndNumTxtBox.Text = "400";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 174);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 12);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "搜索关键字后字符数：";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 147);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(125, 12);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "搜索关键字前字符数：";
+            // 
+            // SearchStartNumTxtBox
+            // 
+            this.SearchStartNumTxtBox.Location = new System.Drawing.Point(137, 140);
+            this.SearchStartNumTxtBox.Name = "SearchStartNumTxtBox";
+            this.SearchStartNumTxtBox.Size = new System.Drawing.Size(100, 21);
+            this.SearchStartNumTxtBox.TabIndex = 7;
+            this.SearchStartNumTxtBox.Text = "300";
             // 
             // label2
             // 
@@ -118,6 +152,7 @@
             this.SearchTxtbox.Name = "SearchTxtbox";
             this.SearchTxtbox.Size = new System.Drawing.Size(296, 21);
             this.SearchTxtbox.TabIndex = 1;
+            this.SearchTxtbox.Text = "510482615500";
             // 
             // AllSearchBtn
             // 
@@ -129,52 +164,20 @@
             this.AllSearchBtn.UseVisualStyleBackColor = true;
             this.AllSearchBtn.Click += new System.EventHandler(this.AllSearchBtn_Click);
             // 
-            // textBox1
+            // ShowTxt
             // 
-            this.textBox1.Location = new System.Drawing.Point(439, 23);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(793, 804);
-            this.textBox1.TabIndex = 1;
-            // 
-            // SearchStartNumTxtBox
-            // 
-            this.SearchStartNumTxtBox.Location = new System.Drawing.Point(137, 140);
-            this.SearchStartNumTxtBox.Name = "SearchStartNumTxtBox";
-            this.SearchStartNumTxtBox.Size = new System.Drawing.Size(100, 21);
-            this.SearchStartNumTxtBox.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 147);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(125, 12);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "搜索关键字前字符数：";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 174);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 12);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "搜索关键字后字符数：";
-            // 
-            // SearchEndNumTxtBox
-            // 
-            this.SearchEndNumTxtBox.Location = new System.Drawing.Point(137, 170);
-            this.SearchEndNumTxtBox.Name = "SearchEndNumTxtBox";
-            this.SearchEndNumTxtBox.Size = new System.Drawing.Size(100, 21);
-            this.SearchEndNumTxtBox.TabIndex = 10;
+            this.ShowTxt.Location = new System.Drawing.Point(439, 23);
+            this.ShowTxt.Multiline = true;
+            this.ShowTxt.Name = "ShowTxt";
+            this.ShowTxt.Size = new System.Drawing.Size(793, 804);
+            this.ShowTxt.TabIndex = 1;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1244, 839);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ShowTxt);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "搜索文本并显示关键信息";
@@ -195,7 +198,7 @@
         private System.Windows.Forms.Button UpBtn;
         private System.Windows.Forms.TextBox SearchTxtbox;
         private System.Windows.Forms.Button AllSearchBtn;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox ShowTxt;
         private System.Windows.Forms.TextBox SearchEndNumTxtBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;

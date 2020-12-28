@@ -16,28 +16,27 @@ namespace SearchAndWatch
 
         private bool ReadBigFile()
         {
-            string sTmpFile = @"c:\tmpTest.txt";
-            if (File.Exists(sTmpFile))
-            {
-                File.Delete(sTmpFile);
-            }
+            //string sTmpFile = @"c:\tmpTest.txt";
+            //if (File.Exists(sTmpFile))
+            //{
+            //    File.Delete(sTmpFile);
+            //}
 
-            if (!System.IO.File.Exists(sTmpFile))
-            {
-                FileStream fs;
-                fs = File.Create(sTmpFile);
-                fs.Close();
-            }
+            //if (!System.IO.File.Exists(sTmpFile))
+            //{
+            //    FileStream fs;
+            //    fs = File.Create(sTmpFile);
+            //    fs.Close();
+            //}
 
-            if (!File.Exists(SearchTxtbox.Text.Trim()))
+            if (!File.Exists(ChangeFileTxtbox.Text.Trim()))
             {
-                SearchTxtbox.Text = "File not exist!";
-                SearchTxtbox.Focus();
+                output("文件未找到。");
+                ChangeFileTxtbox.Focus();
                 return false;
             }
 
-            FileStream streamInput = System.IO.File.OpenRead(ChangeFileTxtbox.Text.Trim());
-            FileStream streamOutput = System.IO.File.OpenWrite(sTmpFile);
+            //FileStream streamOutput = System.IO.File.OpenWrite(sTmpFile);
 
             int iRowStartNums = 500;
             int iRowEndNums = 500;
@@ -46,51 +45,81 @@ namespace SearchAndWatch
             }
             if (!string.IsNullOrEmpty(SearchEndNumTxtBox.Text.Trim()))
             {
-                int.TryParse(SearchEndNumTxtBox.Text.Trim(), out iRowStartNums);
+                int.TryParse(SearchEndNumTxtBox.Text.Trim(), out iRowEndNums);
             }
 
+            FileStream fsRead;
+            //获取文件路径
+            string filePath = ChangeFileTxtbox.Text.Trim().ToString();
+            string strFile;
+            string strTxt = SearchTxtbox.Text.Trim().ToString();
+            //用FileStream文件流打开文件
             try
             {
-                for (int i = 1; i <= iRowCount;)
-                {
-                    int result = streamInput.ReadByte();
-                    if (result == 13)
-                    {
-                        i++;
-                    }
-                    if (result == -1)
-                    {
-                        break;
-                    }
-                    streamOutput.WriteByte((byte)result);
-                }
+                fsRead = new FileStream(@filePath, FileMode.Open);
             }
-            finally
+            catch (Exception)
             {
-                streamInput.Dispose();
-                streamOutput.Dispose();
+
+                throw;
             }
 
-            string sContent = ReaderFile(sTmpFile);
-            CopyToClipboard(sContent);
+            //还没有读取的文件内容长度
+            long leftLength = fsRead.Length;
+            //创建接收文件内容的字节数组
+            byte[] buffer = new byte[(iRowStartNums+ iRowEndNums)*2];
+            //每次读取的最大字节数
+            int maxLength = buffer.Length;
+            //每次实际返回的字节数长度
+            int num = 0;
+            //文件开始读取的位置
+            int fileStart = 0;
+
+            while (leftLength > 0)
+            {
+                //设置文件流的读取位置
+                fsRead.Position = fileStart;
+                if (leftLength < maxLength)
+                {
+                    num = fsRead.Read(buffer, 0, Convert.ToInt32(leftLength));
+                }
+                else
+                {
+                    num = fsRead.Read(buffer, 0, maxLength);
+                }
+                if (num == 0)
+                {
+                    break;
+                }
+                fileStart += num;
+                leftLength -= num;
+                strFile = Encoding.UTF8.GetString(buffer);
+                try
+                {
+                    if (strFile.ToString().Contains(strTxt.ToString()))
+                    {
+                        int num1 = strFile.IndexOf(strTxt.ToString());
+                        int num2 = num1 - iRowStartNums;
+                        if (num2 > 0)
+                        {
+                            output(strFile.Substring(num2, num2 + iRowStartNums + iRowEndNums).ToString());
+                        }
+                        else
+                        {
+                            output(strFile.Substring(0, num1 + iRowEndNums).ToString());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    output(ex.ToString());
+                }
+                
+            }
+            output("end of line");
 
             return true;
-        }
-
-        public static string ReaderFile(string path)
-        {
-            string fileData = string.Empty;
-            try
-            {   ///读取文件的内容    
-                StreamReader reader = new StreamReader(path, Encoding.Default);
-                fileData = reader.ReadToEnd();
-                reader.Close();
-            }
-            catch (Exception ex)
-            {
-                 throw new Exception(ex.Message,ex);  
-            }  ///抛出异常    
-            return fileData;
         }
 
         private void CopyToClipboard(string sSource)
@@ -115,6 +144,17 @@ namespace SearchAndWatch
             }
         }
 
+        delegate void SafeSetText(string strMsg);
+
+        private void output(string strMsg)
+        {
+            SafeSetText objSet = delegate (string str)
+            {
+                ShowTxt.AppendText(str + "\r\n");
+            };
+            ShowTxt.Invoke(objSet, new object[] { strMsg });
+        }
+
         private void AllSearchBtn_Click(object sender, EventArgs e)
         {
             ThreadStart childref = new ThreadStart(CallToChildThread);
@@ -134,96 +174,7 @@ namespace SearchAndWatch
 
         public void CallToChildThread()
         {
-
+            ReadBigFile();
         }
     }
-
-
-    //private static string CreateMemoryMapFile(long ttargetRowNum)
-    //{
-    //    string line = string.Empty;
-    //    using (FileStream fs = new FileStream(TXT_FILE_PATH, FileMode.Open, FileAccess.ReadWrite))
-    //    {
-    //        long targetRowNum = ttargetRowNum + 1;//目标行
-    //        long curRowNum = 1;//当前行
-    //        FILE_SIZE = fs.Length;
-    //        using (MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(fs, "test", fs.Length, MemoryMappedFileAccess.ReadWrite, null, HandleInheritability.None, false))
-    //        {
-    //            long offset = 0;
-    //            //int limit = 250;
-    //            int limit = 200;
-    //            try
-    //            {
-    //                StringBuilder sbDefineRowLine = new StringBuilder();
-    //                do
-    //                {
-    //                    long remaining = fs.Length - offset;
-    //                    using (MemoryMappedViewStream mmStream = mmf.CreateViewStream(offset, remaining > limit ? limit : remaining))
-    //                    //using (MemoryMappedViewStream mmStream = mmf.CreateViewStream(offset, remaining))
-    //                    {
-    //                        offset += limit;
-    //                        using (StreamReader sr = new StreamReader(mmStream))
-    //                        {
-    //                            //string ss = sr.ReadToEnd().ToString().Replace("\n", "囧").Replace(Environment.NewLine, "囧");
-    //                            string ss = sr.ReadToEnd().ToString().Replace("\n", SPLIT_VARCHAR).Replace(Environment.NewLine, SPLIT_VARCHAR);
-    //                            if (curRowNum <= targetRowNum)
-    //                            {
-    //                                if (curRowNum < targetRowNum)
-    //                                {
-    //                                    string s = sbDefineRowLine.ToString();
-    //                                    int pos = s.LastIndexOf(SPLIT_CHAR);
-    //                                    if (pos > 0)
-    //                                        sbDefineRowLine.Remove(0, pos);
-
-    //                                }
-    //                                else
-    //                                {
-    //                                    line = sbDefineRowLine.ToString();
-    //                                    return line;
-    //                                }
-    //                                if (ss.Contains(SPLIT_VARCHAR))
-    //                                {
-    //                                    curRowNum += GetNewLineNumsOfStr(ss);
-    //                                    sbDefineRowLine.Append(ss);
-    //                                }
-    //                                else
-    //                                {
-    //                                    sbDefineRowLine.Append(ss);
-    //                                }
-    //                            }
-    //                            //sbDefineRowLine.Append(ss);
-    //                            //line = sbDefineRowLine.ToString();
-    //                            //if (ss.Contains(Environment.NewLine))
-    //                            //{
-    //                            //    ++curRowNum;
-    //                            //    //curRowNum++;
-    //                            //    //curRowNum += GetNewLineNumsOfStr(ss);
-    //                            //    //sbDefineRowLine.Append(ss);
-    //                            //}
-    //                            //if (curRowNum == targetRowNum)
-    //                            //{
-    //                            //    string s = "";
-    //                            //}
-
-    //                            sr.Dispose();
-    //                        }
-
-    //                        mmStream.Dispose();
-    //                    }
-    //                } while (offset < fs.Length);
-    //            }
-    //            catch (Exception e)
-    //            {
-    //                Console.WriteLine(e.Message);
-    //            }
-    //            return line;
-    //        }
-    //    }
-    //}
-
-    //private static long GetNewLineNumsOfStr(string s)
-    //{
-    //    string[] _lst = s.Split(SPLIT_CHAR);
-    //    return _lst.Length - 1;
-    //}
 }
